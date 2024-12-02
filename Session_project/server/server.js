@@ -40,6 +40,19 @@ app.post("/api/exams", (req, res) => {
     });
 });
 
+app.put("/api/exams/:id", (req, res) => {
+    const { id } = req.params;
+    const { grade } = req.body;
+    const query = `UPDATE exams SET grade = ? WHERE id = ?`;
+    db.run(query, [grade, id], function (err) {
+        if (err) {
+            res.status(500).json({ error: err.message });
+        } else {
+            res.json({ updated: this.changes });
+        }
+    });
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
